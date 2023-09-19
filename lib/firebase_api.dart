@@ -6,6 +6,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fcm/main.dart';
 import 'package:google_fcm/page/notification_screen.dart';
 
+final _localNotifications = FlutterLocalNotificationsPlugin();
+
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
   log('Title :  ${message.notification?.title}');
   log('Body : ${message.notification?.body}');
@@ -21,8 +23,6 @@ class FirebaseApi {
     description: 'This channel is used for important notifications.',
     importance: Importance.defaultImportance,
   );
-
-  final _localNotifications = FlutterLocalNotificationsPlugin();
 
   void handleMessage(RemoteMessage? message) {
     log('handleMessage : ${message.toString()}');
@@ -42,11 +42,9 @@ class FirebaseApi {
     await _localNotifications.initialize(
       settings,
       onDidReceiveNotificationResponse: (details) {
-        final message = RemoteMessage.fromMap(jsonDecode(details.toString()));
-        handleMessage(message);
-      },
-      onDidReceiveBackgroundNotificationResponse: (details) {
-        final message = RemoteMessage.fromMap(jsonDecode(details.toString()));
+        log('onDidReceiveNotificationResponse ${details.toString()}');
+        final message =
+            RemoteMessage.fromMap(jsonDecode(details.payload.toString()));
         handleMessage(message);
       },
     );

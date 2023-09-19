@@ -21,6 +21,7 @@ class NotificationScreen extends StatelessWidget {
           children: [
             Text(message?.notification?.title ?? ''),
             Text(message?.notification?.body ?? ''),
+            Text(message?.data.toString() ?? ''),
           ],
         ),
       ),
